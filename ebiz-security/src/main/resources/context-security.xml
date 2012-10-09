@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/security"
-    xmlns:beans="http://www.springframework.org/schema/beans"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:sec="http://www.springframework.org/schema/security"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">                     
-    <debug/>      
-    <http pattern="/js/**" security="none"/>
-    <http pattern="/resource/**" security="none"/>
-    <http pattern="/login.jsp" security="none"/>    
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">                    
+    <sec:debug/>      
+    <sec:http pattern="/js/**" security="none"/>
+    <sec:http pattern="/resource/**" security="none"/>
+    <sec:http pattern="/login.jsp" security="none"/>    
     <!-- 
-    <http use-expressions="true" entry-point-ref="authenticationProcessingFilterEntryPoint">
+    <sec:http use-expressions="true" entry-point-ref="authenticationProcessingFilterEntryPoint">
+        <sec:logout/>
+        <sec:remember-me />
+        <sec:session-management invalid-session-url="/timeout.jsp">
+            <sec:concurrency-control max-sessions="100" error-if-maximum-exceeded="true" />
+        </sec:session-management>  
+       	<sec:custom-filter ref="loginFilter" position="FORM_LOGIN_FILTER"  />
+		<sec:custom-filter ref="securityFilter" before="FILTER_SECURITY_INTERCEPTOR"/>
+    </sec:http>    
      -->
-        <logout/>
-        <!-- 实现免登陆验证 -->
-        <remember-me />
-        <session-management invalid-session-url="/timeout.jsp">
-            <concurrency-control max-sessions="10" error-if-maximum-exceeded="true" />
-        </session-management>        
-        <!-- 
-       	<custom-filter ref="loginFilter" position="FORM_LOGIN_FILTER"  />
-         -->
-		<custom-filter ref="securityFilter" before="FILTER_SECURITY_INTERCEPTOR"/>
-    </http>    
     <!-- 登录验证器 -->
     <!-- 
     <bean id="loginFilter"
@@ -52,9 +49,9 @@
     	<property name="securityMetadataSource" ref="securityMetadataSource" />
     </bean>
     <!-- 实现了UserDetailsService的Bean -->
-    <authentication-manager alias="authenticationManager">
-        <authentication-provider user-service-ref="userDetailService" />
-    </authentication-manager>
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider user-service-ref="userDetailService" />
+    </sec:authentication-manager>
     
     <bean id="accessDecisionManager" class="com.xiaomi.ebiz.security.DefaultAccessDecisionManager"/>
 	<bean id="securityMetadataSource" class="com.xiaomi.ebiz.security.DefaultSecurityMetadataSource"/>

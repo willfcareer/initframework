@@ -44,8 +44,9 @@ public class DefaultSecurityMetadataSource implements FilterInvocationSecurityMe
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		if (Resource.class.isAssignableFrom(clazz)) return true;
-		return false;
+		return true;
+//		if (Resource.class.isAssignableFrom(clazz)) return true;
+//		return false;
 	}
 
 	@Override

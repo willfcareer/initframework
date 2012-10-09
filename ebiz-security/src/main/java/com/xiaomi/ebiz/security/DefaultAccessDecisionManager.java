@@ -32,7 +32,7 @@ public class DefaultAccessDecisionManager implements AccessDecisionManager {
 			}
 		}
 		//没有权限让我们去捕捉
-		throw new AccessDeniedException(" 没有权限访问！");
+		throw new AccessDeniedException("Forbidden!");
 	}
 
 	@Override
