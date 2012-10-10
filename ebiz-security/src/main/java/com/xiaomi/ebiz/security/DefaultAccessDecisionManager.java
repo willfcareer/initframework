@@ -3,6 +3,8 @@ package com.xiaomi.ebiz.security;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -11,27 +13,28 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 public class DefaultAccessDecisionManager implements AccessDecisionManager {
+	private static final Logger logger = LoggerFactory.getLogger(DefaultAccessDecisionManager.class);
 
 	@Override
 	public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
-		if(configAttributes == null) {
+		if (configAttributes == null) {
+			logger.debug("configAttributes is null");
 			return;
 		}
-		//所请求的资源拥有的权限(一个资源对多个权限)
+		// The needed authority for target resources
 		Iterator<ConfigAttribute> iterator = configAttributes.iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			ConfigAttribute configAttribute = iterator.next();
-			//访问所请求资源所需要的权限
-			String needPermission = configAttribute.getAttribute();
-			System.out.println("needPermission is " + needPermission);
-			//用户所拥有的权限authentication
-			for(GrantedAuthority ga : authentication.getAuthorities()) {
-				if(needPermission.equals(ga.getAuthority())) {
+			String authority = configAttribute.getAttribute();
+			logger.debug(String.format("Needed authority: %s", authority));
+			// Match authority
+			for (GrantedAuthority ga : authentication.getAuthorities()) {
+				if (authority.equals(ga.getAuthority())) {
+					logger.debug(String.format("Found match authority", authority));
 					return;
 				}
 			}
 		}
-		//没有权限让我们去捕捉
 		throw new AccessDeniedException("Forbidden!");
 	}
 

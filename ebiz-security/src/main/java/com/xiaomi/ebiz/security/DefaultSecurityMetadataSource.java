@@ -21,7 +21,7 @@ import com.xiaomi.ebiz.utils.CollectionUtils;
 
 @Component
 public class DefaultSecurityMetadataSource implements FilterInvocationSecurityMetadataSource, InitializingBean {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(DefaultSecurityMetadataSource.class);
 
 	private Map<String, Collection<ConfigAttribute>> resources = CollectionUtils.newHashMap();
@@ -31,22 +31,26 @@ public class DefaultSecurityMetadataSource implements FilterInvocationSecurityMe
 
 	@Override
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
-		return null;
+		// TODO return the real and dynamic securityConfig objects
+		Collection<ConfigAttribute> returnCollection = new ArrayList<ConfigAttribute>();
+		returnCollection.add(new SecurityConfig("supervisor"));
+		returnCollection.add(new SecurityConfig("user"));
+		return returnCollection;
 	}
 
 	@Override
-	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {		
+	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 		String requestUrl = ((FilterInvocation) object).getRequestUrl();
 		Collection<ConfigAttribute> attributes = resources.get(requestUrl);
-		if(logger.isDebugEnabled()) logger.debug(String.format("Found configAttribute %s by requestUrl:",attributes,requestUrl));
+		if (logger.isDebugEnabled()) logger.debug(String.format("Found configAttribute %s by requestUrl: %s", attributes, requestUrl));
 		return attributes;
 	}
 
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return true;
-//		if (Resource.class.isAssignableFrom(clazz)) return true;
-//		return false;
+		// if (Resource.class.isAssignableFrom(clazz)) return true;
+		// return false;
 	}
 
 	@Override
@@ -55,9 +59,10 @@ public class DefaultSecurityMetadataSource implements FilterInvocationSecurityMe
 		List<Resource> _resources = resourceMapper.findAll();
 		for (Resource resource : _resources) {
 			Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
-			// 以权限名封装为Spring的security Object
+			// Warp to security object by authority name
 			ConfigAttribute configAttribute = new SecurityConfig(resource.getName());
 			configAttributes.add(configAttribute);
+			// Cache by resource value
 			resources.put(resource.getValue(), configAttributes);
 		}
 	}

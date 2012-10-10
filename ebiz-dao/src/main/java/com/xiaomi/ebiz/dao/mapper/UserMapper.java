@@ -11,4 +11,5 @@ public interface UserMapper {
 
 	@Select("SELECT * FROM user WHERE username = #{username}")
 	public List<User> findByName(@Param("username") final String username);
+
 }

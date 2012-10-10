@@ -1,6 +1,7 @@
 package com.xiaomi.ebiz.dao.entity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -8,16 +9,16 @@ import javax.persistence.Entity;
 @Entity
 public class User {
 
-	private String id;
+	private int id;
 	private String username;
 	private String password;
 	private Set<Role> roles = new HashSet<Role>(0);
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -38,11 +39,12 @@ public class User {
 	}
 
 	public Set<Role> getRoles() {
+		// TODO 临时值
 		return roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public void addRoles(List<Role> roles) {
+		this.roles.addAll(roles);
 	}
 
 	@Override

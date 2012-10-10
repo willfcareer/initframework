@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.xiaomi.ebiz.dao.entity.Resource;
+import com.xiaomi.ebiz.dao.entity.Role;
 import com.xiaomi.ebiz.dao.entity.User;
+import com.xiaomi.ebiz.dao.mapper.ResourceMapper;
+import com.xiaomi.ebiz.dao.mapper.RoleMapper;
 import com.xiaomi.ebiz.dao.mapper.UserMapper;
 
 @Service
@@ -19,10 +23,25 @@ public class UserService {
 	@Autowired
 	private UserMapper userMapper;
 
+	@Autowired
+	private RoleMapper roleMapper;
+
+	@Autowired
+	private ResourceMapper resourceMapper;
+
 	@Transactional
 	public User findUserByName(String username) {
 		List<User> users = userMapper.findByName(username);
 		if (logger.isDebugEnabled()) logger.debug(String.format("Found user size %d", users.size()));
-		return users.get(0);
+		User user = users.get(0);
+		int uid = user.getId();
+		List<Role> roles = roleMapper.findRolesByUid(uid);
+		for (Role role : roles) {
+			int rid = role.getId();
+			List<Resource> resources = resourceMapper.findResourcesByRid(rid);
+			role.addResources(resources);
+		}
+		user.addRoles(roles);
+		return user;
 	}
 }

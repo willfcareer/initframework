@@ -8,8 +8,8 @@
 		<param-value>ebiz.root</param-value>
 	</context-param>
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
