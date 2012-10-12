@@ -12,6 +12,7 @@
 		<module>ebiz-service</module>
 		<module>ebiz-security</module>
 		<module>ebiz-web</module>
+		<module>ebiz-demo</module>
 	</modules>
 	<properties>
 		<spring.version>3.1.2.RELEASE</spring.version>

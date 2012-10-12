@@ -38,6 +38,14 @@ create table role_resource(
 	PRIMARY KEY  (`role_id`,`resource_id`)
 );
 
+drop table if exists message;
+create table message(
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`message` varchar(256) NOT NULL,
+	PRIMARY KEY  (`id`)
+);
+
+
 INSERT INTO user (`id`,`username`,`password`) values(1,'admin','admin');
 INSERT INTO user (`id`,`username`,`password`) values(2,'edwin','edwin');
 
@@ -56,6 +64,8 @@ INSERT INTO user_role (`user_id`,`role_id`) values(2,2);
 INSERT INTO role_resource (`role_id`,`resource_id`) values(1,1);
 INSERT INTO role_resource (`role_id`,`resource_id`) values(1,2);
 INSERT INTO role_resource (`role_id`,`resource_id`) values(2,2);
+
+INSERT INTO message (`id`,`message`) values(1,'Hello World!');
 
 
 
